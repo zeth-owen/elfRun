@@ -59,6 +59,7 @@ class Player {
         if (this.image) {
             this.draw();
             this.position.x += this.velocity.x;
+            this.position.y += this.velocity.y;
         }
     }
 }
@@ -236,7 +237,7 @@ class Grid {
         }
     }
 }
-
+// new Player() is its own instance or reference in memory
 const player = new Player();
 const projectiles = [];
 const grids = [];
@@ -251,7 +252,13 @@ const keys = {
     },
     Space: {
         pressed: false,
-    }
+    },
+    ArrowUp: {
+        pressed: false,
+    },
+    ArrowDown: {
+        pressed: false,
+    },
 };
 
 let frames = 0
@@ -438,10 +445,16 @@ function animate() {
     } else if (keys.ArrowRight.pressed && player.position.x + player.width <= canvas.width) {
         player.velocity.x = 5;
         player.rotation = 0.3;
+    } else if (keys.ArrowUp.pressed && player.position.y >= canvas.height / 2) {
+        player.velocity.y = -5;
+    } else if (keys.ArrowDown.pressed && player.position.y + player.height <= canvas.height) {
+        player.velocity.y = 5;
     } else {
         player.velocity.x = 0;
+        player.velocity.y = 0;
         player.rotation = 0;
     }
+
     //spawning enemies
     if (frames % randomInterval === 0) {
         grids.push(new Grid())
@@ -464,6 +477,14 @@ addEventListener('keydown', ({ key }) => {
         case 'ArrowRight':
             console.log('Right arrow pressed');
             keys.ArrowRight.pressed = true;
+            break;
+        case 'ArrowUp':
+            console.log('Up arrow pressed');
+            keys.ArrowUp.pressed = true;
+            break;
+        case 'ArrowDown':
+            console.log('Down arrow pressed');
+            keys.ArrowDown.pressed = true;
             break;
         case ' ':
             console.log('Spacebar pressed');
@@ -494,9 +515,39 @@ addEventListener('keyup', ({ key }) => {
             console.log('Right arrow released');
             keys.ArrowRight.pressed = false;
             break;
+        case 'ArrowUp':
+            console.log('Up arrow released');
+            keys.ArrowUp.pressed = false;
+            break;
+        case 'ArrowDown':
+            console.log('Down arrow released');
+            keys.ArrowDown.pressed = false;
+            break;
         case 'Space':
             console.log('Spacebar released');
             keys.Space.pressed = false;
             break;
     }
 });
+
+const restartButton = document.getElementById('restartButton');
+restartButton.addEventListener('click', () => {
+    console.log('Player position:', player.position);
+    console.log('Game over:', game.over);
+    console.log('Game active:', game.active);
+    player.position = {
+        x: canvas.width / 2 - player.width / 2,
+        y: canvas.height - player.height - 20
+    };
+
+    game.over = false;
+    game.active = true;
+    score = 0;
+    scoreEl.innerHTML = score;
+    console.log('Player position after restart:', player.position);
+    console.log('Game over after restart:', game.over);
+    console.log('Game active after restart:', game.active);
+}); 
+
+
+

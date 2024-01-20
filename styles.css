@@ -27,8 +27,17 @@ main {
     position: relative;
 }
 
+button {
+    margin: 1em;
+}
+
+div {
+    position: relative
+}
+
 p {
-    position: relative;
+    position: absolute;
+    font-size: 3em;
     z-index: 5;
     color: white;
     text-align: left;
