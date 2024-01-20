@@ -23,8 +23,8 @@ class Player {
         image.onload = () => {
             console.log("Image loaded:", image.width, "x", image.height);
             this.image = image;
-            this.width = image.width;
-            this.height = image.height;
+            this.width = image.width * 1.5;
+            this.height = image.height * 1.5;
             this.position = {
                 x: canvas.width / 2 - this.width / 2,
                 y: canvas.height - this.height - 20
