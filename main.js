@@ -5,8 +5,8 @@ const resultElement = document.getElementById('result')
 
 const body = document.body;
 
-canvas.width = body.clientWidth * 0.75;
-canvas.height = body.clientHeight * 0.75;
+canvas.width = body.clientWidth * 0.6;
+canvas.height = body.clientHeight * 0.6;
 
 class Player {
     constructor() {
@@ -23,8 +23,8 @@ class Player {
         image.onload = () => {
             console.log("Image loaded:", image.width, "x", image.height);
             this.image = image;
-            this.width = image.width * 1.5;
-            this.height = image.height * 1.5;
+            this.width = image.width;
+            this.height = image.height;
             this.position = {
                 x: canvas.width / 2 - this.width / 2,
                 y: canvas.height - this.height - 20
@@ -191,7 +191,7 @@ class Invader {
             },
             velocity: {
                 x: 0,
-                y: 5
+                y: 6
             }
         }))
     }
@@ -305,25 +305,6 @@ function createParticles ({object, color, fades}) {
                )
               } 
 }
-
-const restartButton = document.getElementById('restartButton');
-restartButton.addEventListener('click', () => {
-    console.log('Player position:', player.position);
-    console.log('Game over:', game.over);
-    console.log('Game active:', game.active);
-    player.position = {
-        x: canvas.width / 2 - player.width / 2,
-        y: canvas.height - player.height - 20
-    };
-
-    game.over = false;
-    game.active = true;
-    score = 0;
-    scoreEl.innerHTML = score;
-    console.log('Player position after restart:', player.position);
-    console.log('Game over after restart:', game.over);
-    console.log('Game active after restart:', game.active);
-}); 
 
 
 function animate() {
@@ -464,15 +445,15 @@ function animate() {
     })
 
     if (keys.ArrowLeft.pressed && player.position.x >= 0) {
-        player.velocity.x = -5;
+        player.velocity.x = -7;
         player.rotation = -0.3;
     } else if (keys.ArrowRight.pressed && player.position.x + player.width <= canvas.width) {
-        player.velocity.x = 5;
+        player.velocity.x = 7;
         player.rotation = 0.3;
     } else if (keys.ArrowUp.pressed && player.position.y >= canvas.height / 2) {
-        player.velocity.y = -5;
+        player.velocity.y = -7;
     } else if (keys.ArrowDown.pressed && player.position.y + player.height <= canvas.height) {
-        player.velocity.y = 5;
+        player.velocity.y = 7;
     } else {
         player.velocity.x = 0;
         player.velocity.y = 0;
@@ -553,6 +534,13 @@ addEventListener('keyup', ({ key }) => {
             break;
     }
 });
+
+const restartButton = document.getElementById('restartButton');
+
+restartButton.addEventListener('click', () => {
+    location.reload();
+});
+
 
 
 
