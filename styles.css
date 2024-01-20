@@ -15,6 +15,10 @@ header {
     color: white;
     margin: 0;
 }
+header h1 {
+    font-size: 2em; 
+    line-height: 100%;
+}
 
 #backgroundImage {
     width: 100%;
@@ -89,4 +93,9 @@ footer {
     background: linear-gradient(to right, #0f2d2c, #324542);
     color: white;
     margin: 0;
+}
+
+footer h1 {
+    font-size: 2em; 
+    line-height: 100%;
 }
