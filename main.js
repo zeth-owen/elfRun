@@ -1,6 +1,7 @@
 const canvas = document.querySelector('canvas');
 const scoreEl = document.querySelector('#scoreEl');
 const context = canvas.getContext('2d');
+const resultElement = document.getElementById('result')
 
 const body = document.body;
 
@@ -305,9 +306,32 @@ function createParticles ({object, color, fades}) {
               } 
 }
 
+const restartButton = document.getElementById('restartButton');
+restartButton.addEventListener('click', () => {
+    console.log('Player position:', player.position);
+    console.log('Game over:', game.over);
+    console.log('Game active:', game.active);
+    player.position = {
+        x: canvas.width / 2 - player.width / 2,
+        y: canvas.height - player.height - 20
+    };
+
+    game.over = false;
+    game.active = true;
+    score = 0;
+    scoreEl.innerHTML = score;
+    console.log('Player position after restart:', player.position);
+    console.log('Game over after restart:', game.over);
+    console.log('Game active after restart:', game.active);
+}); 
+
 
 function animate() {
-    if (!game.active) return
+    if (!game.active) {
+    resultElement.innerHTML = score + '<br> Winner!';
+    return
+    }
+  
     requestAnimationFrame(animate);
     context.fillStyle = 'black';
     context.fillRect(0, 0, canvas.width, canvas.height);
@@ -529,25 +553,6 @@ addEventListener('keyup', ({ key }) => {
             break;
     }
 });
-
-const restartButton = document.getElementById('restartButton');
-restartButton.addEventListener('click', () => {
-    console.log('Player position:', player.position);
-    console.log('Game over:', game.over);
-    console.log('Game active:', game.active);
-    player.position = {
-        x: canvas.width / 2 - player.width / 2,
-        y: canvas.height - player.height - 20
-    };
-
-    game.over = false;
-    game.active = true;
-    score = 0;
-    scoreEl.innerHTML = score;
-    console.log('Player position after restart:', player.position);
-    console.log('Game over after restart:', game.over);
-    console.log('Game active after restart:', game.active);
-}); 
 
 
 
