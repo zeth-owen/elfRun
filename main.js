@@ -6,7 +6,7 @@ const resultElement = document.getElementById('result')
 const body = document.body;
 
 canvas.width = body.clientWidth * 0.5;
-canvas.height = body.clientHeight * 0.7;
+canvas.height = body.clientHeight * 0.6;
 
 class Player {
     constructor() {
