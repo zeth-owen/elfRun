@@ -41,6 +41,7 @@ main {
 
 #restartButton {
     margin: 1.5em;
+    margin-bottom: 2em;
     font-size: 2em;
     border-radius: 8px;
     background: linear-gradient(to right, #ff416c, #ff4b2b);
