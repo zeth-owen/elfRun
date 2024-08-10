@@ -2,11 +2,12 @@ const canvas = document.querySelector('canvas');
 const scoreEl = document.querySelector('#scoreEl');
 const context = canvas.getContext('2d');
 const resultElement = document.getElementById('result')
-
 const body = document.body;
 
 canvas.width = body.clientWidth * 0.5;
 canvas.height = body.clientHeight * 0.6;
+
+const isMobile = window.innerWidth <= 768; 
 
 class Player {
     constructor() {
@@ -204,12 +205,12 @@ class Grid {
             y: 0
         };
         this.velocity = {
-            x: 3,
+            x: isMobile ? 1 : 3, 
             y: 0
         };
         this.invaders = [];
 
-        const rows = Math.floor(Math.random() * 10 + 5)
+        const rows = isMobile ? 2 : Math.floor(Math.random() * 10 + 5);
         const columns = Math.floor(Math.random() * 5 + 5)
 
         this.width = columns * 34
@@ -307,23 +308,36 @@ function createParticles ({object, color, fades}) {
               } 
 }
 
+let isMoving = false;
+let moveDirection = { x: 0, y: 0 };
 
+
+// Game loop to handle movement based on joystick direction
 function animate() {
     if (!game.active) {
-    resultElement.innerHTML = score + '<br> Winner!';
-    return
+        resultElement.innerHTML = score + '<br> Winner!';
+        return;
     }
   
     requestAnimationFrame(animate);
     context.fillStyle = 'black';
     context.fillRect(0, 0, canvas.width, canvas.height);
     player.update();
+
+   
+    if (isMoving) {
+        player.velocity.x = moveDirection.x * 7; // Adjust speed as needed
+        player.rotation = moveDirection.x > 0 ? 0.3 : (moveDirection.x < 0 ? -0.3 : 0);
+    } else {
+        player.velocity.x = 0; 
+        player.rotation = 0; 
+    }
+
     particles.forEach((particle, index) => {
-        if(particle.position.y - particle.radius >= canvas.
-            height) {
-                particle.position.x = Math.random() * canvas.width
-                particle.position.y = -particle.radius
-            }
+        if (particle.position.y - particle.radius >= canvas.height) {
+            particle.position.x = Math.random() * canvas.width;
+            particle.position.y = -particle.radius;
+        }
 
         if (particle.opacity <= 0) {
             setTimeout(() => {
@@ -333,6 +347,8 @@ function animate() {
             particle.update();
         }
     });
+
+
 
     invaderProjectiles.forEach((invaderProjectile, index) => {
         if (invaderProjectile.position && invaderProjectile.position.y + invaderProjectile.height >= canvas.height) {
@@ -510,6 +526,78 @@ addEventListener('keydown', ({ key }) => {
             break;
     }
 });
+
+const joystickContainer = document.getElementById('joystickContainer');
+const joystick = document.getElementById('joystick');
+
+
+
+// Handle joystick touch start
+joystickContainer.addEventListener('touchstart', (event) => {
+    isMoving = true;
+    moveJoystick(event);
+}, { passive: true });
+
+
+// Handle joystick touch move
+joystickContainer.addEventListener('touchmove', (event) => {
+    moveJoystick(event);
+});
+
+// Handle joystick touch end
+joystickContainer.addEventListener('touchend', () => {
+    isMoving = false;
+    joystick.style.transform = 'translate(0, 0)'; 
+    moveDirection = { x: 0, y: 0 }; 
+});
+
+
+function moveJoystick(event) {
+    event.preventDefault(); 
+
+    const touch = event.touches[0];
+    const containerRect = joystickContainer.getBoundingClientRect();
+
+    // Calculate joystick position
+    let x = touch.clientX - containerRect.left - (joystickContainer.offsetWidth / 2);
+    let y = touch.clientY - containerRect.top - (joystickContainer.offsetHeight / 2);
+
+    // Limit joystick movement
+    const maxDistance = 40; 
+    const distance = Math.sqrt(x * x + y * y);
+
+    if (distance > maxDistance) {
+        const angle = Math.atan2(y, x);
+        x = Math.cos(angle) * maxDistance;
+        y = Math.sin(angle) * maxDistance;
+    }
+
+    joystick.style.transform = `translate(${x}px, ${y}px)`;
+
+    // Calculate movement direction
+    moveDirection.x = x / maxDistance;
+    moveDirection.y = y / maxDistance;
+}
+
+const shootButton = document.getElementById('shootButton');
+if (shootButton) {
+    shootButton.addEventListener('click', () => {
+        projectiles.push(
+            new Projectiles({
+                position: {
+                    x: player.position.x + player.width / 2,
+                    y: player.position.y
+                },
+                velocity: {
+                    x: 0,
+                    y: -5
+                }
+            })
+        );
+    });
+} else {
+    console.error('Shoot button not found');
+}
 
 addEventListener('keyup', ({ key }) => {
     switch (key) {

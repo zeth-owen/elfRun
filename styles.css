@@ -5,7 +5,9 @@ body {
     justify-content: center;
     min-height: 100vh;
     margin: 0;
+    overflow: hidden;
 }
+
 
 header {
     display: flex;
@@ -104,3 +106,62 @@ footer {
 footer h1 {
     font-size: 5em;
 }
+
+@media (max-width: 768px) {
+    body {
+        flex-direction: column;   
+        padding: 20px;            
+        font-size: 14px;          
+        background-color: #f0f0f0; 
+    }
+    footer {
+        display: none;  
+    }
+    header h1 {
+        font-size: 2em;
+    }
+}
+
+.controllers {
+    position: absolute;
+    display: flex;
+    bottom: 20px; 
+    left: 5vw; 
+    width: 45vw; 
+    height: 200px;
+    align-items: center;
+    justify-content: space-between;
+}
+.joystickcontainer {
+    width: 150px; 
+    height: 150px; 
+    background-color: rgba(204, 204, 204, 0.5);
+    border-radius: 50%; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.joystick {
+    width: 60px; 
+    height: 60px; 
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 50%; 
+    position: absolute;
+    cursor: pointer;
+}
+
+.circle-button {
+    width: 60px; 
+    height: 60px; 
+    background-color: #f00; 
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s;
+    
+}
+
+.circle-button:hover {
+    background-color: #c00;
+}
+
